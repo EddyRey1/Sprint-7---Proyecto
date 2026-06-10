@@ -1,30 +1,39 @@
 import streamlit as st
 import pandas as pd
-import plotly.express as px
+import plotly.graph_objects as go
 
-df = pd.read_csv('../vehicles_us.csv')
+st.header("Analisis de anuncios de venta de vehiculos", divider="green")#Crear encabezado
 
-df.head()
-
-df.info()
-
- st.header("Anuncios de venta", divider="green")#Crear encabezado
-
-# Crear un botón en la aplicación Streamlit
+car_data = pd.read_csv('vehicles_us.csv') #cargar datos
+ 
+# Crear un botón para histograma en la aplicación Streamlit
 hist_button = st.button('Construir histograma')
 
 # Lógica a ejecutar cuando se hace clic en el botón
 if hist_button:
     # Escribir un mensaje en la aplicación
-    st.write('Creación de un histograma para el conjunto de datos de anuncios de venta de coches')
+    st.write('Creación de un histograma para la columna odometer')
 
     # Crear un histograma utilizando plotly.graph_objects
     # Se crea una figura vacía y luego se añade un rastro de histograma
     fig = go.Figure(data=[go.Histogram(x=car_data['odometer'])])
 
     # Opcional: Puedes añadir un título al gráfico si lo deseas
-    fig.update_layout(title_text='Distribución del Odómetro')
+    fig.update_layout(title_text='Distribución del Kilometraje')
 
     # Mostrar el gráfico Plotly interactivo en la aplicación Streamlit
     # 'use_container_width=True' ajusta el ancho del gráfico al contenedor
     st.plotly_chart(fig, use_container_width=True)
+    
+# Botón para gráfico de dispersión
+scatter_button = st.button('Construir gráfico de dispersión')
+
+if scatter_button:
+    st.write('Relación entre kilometraje y precio')
+
+    fig = go.Figure(data = [go.Scatter(x = car_data['odometer'], y=car_data['price'], mode = 'markers')])
+
+    fig.update_layout(title = 'Precio vs Kilometraje', xaxis_title = 'Kilometraje', yaxis_title = 'Precio')
+
+    st.plotly_chart(fig, use_container_width = True)
+   
